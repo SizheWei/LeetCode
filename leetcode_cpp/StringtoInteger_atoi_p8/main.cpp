@@ -8,52 +8,71 @@
 
 #include <iostream>
 #include <string>
+#include <limits>
 #include <vector>
 
 using namespace std;
 
 
-//class Solution {
-//public:
-//    int myAtoi(string str) {
-//        return 0;
-//    }
-//};
-
 class Solution {
 public:
-    int lengthOfLongestSubstring(string s) {
-        int len = int(s.size());
-        int idealmaxlen = len;
-        int curLen = 0;
-        for (int i=0; i < len; i++){
-            idealmaxlen = len - i;
-            string tmp;
-            tmp += s[i];
-            int j = 0;
-            for (j = 1; i + j < len; j++) {
-                if(tmp.find(s[i+j]) == string::npos){
-                    tmp += s[i+j];
+    int myAtoi(string str) {
+        if (str.empty()) return 0;
+        int i=0;
+        int len = int(str.size());
+        bool findnum = false;
+        bool plusmins = 1;
+        long long int result = 0;
+        for (i=0;i<len;i++){
+            if(!findnum){
+                if (str[i]==' ') {
                     continue;
                 }
-                else break;
+                else if (!((str[i] == '+' || str[i] == '-')||(str[i]>='0' && str[i]<='9'))) {
+                    return 0;
+                }
+                else if (str[i] == '+' || str[i] == '-') {
+                    if ((i+1 < len) & (str[i+1]<='9' && str[i+1]>='0')) {
+                        findnum = true;
+                        plusmins = str[i]=='-' ? 0 : 1;
+                        i++;
+                        result = 10*result + int(str[i]-'0');
+                        continue;
+                    }
+                    else break;
+                }
+                else if((str[i]>='0' && str[i]<='9')){
+                    findnum = true;
+                    result = 10*result + int(str[i]-'0');
+                    continue;
+                }
             }
-            if (j>curLen) {
-                curLen = j;
+            else if (str[i]>='0' && str[i]<='9'){
+                result = 10*result + int(str[i]-'0');
+                if (plusmins && result > INT_MAX) {
+                    return INT_MAX;
+                }
+                if (!plusmins && -result < INT_MIN) {
+                    return INT_MIN;
+                }
             }
-            if (curLen == idealmaxlen){
+            else
                 break;
-            }
         }
-        return curLen;
+        
+        if (!findnum) {
+            return 0;
+        }
+        
+        return plusmins ? int(result):int(-result);
     }
 };
 
+
 int main() {
     Solution problem;
-    string s = "Hello,world!";
-//    int result = problem.myAtoi(s);
-    int result = problem.lengthOfLongestSubstring(s);
+    string s = "91283472332";
+    int result = problem.myAtoi(s);
     cout << result;
     return 0;
 }
