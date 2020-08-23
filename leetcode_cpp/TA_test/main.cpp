@@ -6,122 +6,66 @@
 //  Copyright © 2020 SizheWei. All rights reserved.
 //
 
-//#include <iostream>
-//
-//using namespace std;
-//
-//
-//int Loop(int amount,int count)
-//{
-//    int result = 0;
-//    for(int i=2 ; i<=amount ; ++i)
-//    {
-//        result = (result + count)%i;
-//    }
-//    return result;
-//}
-//
-//int main()
-//{
-//    int amount,count;
-//    cin>>amount;
-//    cin>>count;
-//    cout<<Loop(amount,count)+1<<endl;
-//
-//
-//    return 0;
-//}
+#include<iostream>
+#include<vector>
+#include<string>
 
-
-#include <iostream>
 using namespace std;
-
-typedef struct List
-{
-    int num;
-    struct List *next;
-}*pList;
-
-
-class Josephus
-{
-    public:
-        Josephus() {}
-        Josephus(int number, int mes):
-            n(number),
-            m(mes){}
-        void set();
-        void creat();
-        void del();
-    private:
-        pList head;
-        int n, m, tmp_n;
+class priorityQueue{
+  private:
+     vector<int> s;
+  public:
+  void insert(int x)
+     {
+      if(s.empty()) {s[0]=x; return;}
+      int temp=s.size();//cout<<temp<<endl;
+      for(;temp>0&&x<s[(temp-1)/2];temp=(temp-1)/2)
+      s[temp]=s[(temp-1)/2];
+      s[temp]=x;
+     }
+     void find(int x)
+     {int lens=s.size(),i=0,maxMIN=s[lens-1],maxMINj=lens-1;
+      for(;i<lens;++i)
+      {if(s[i]==x) break;
+      }
+      for(int j=i+1;j<lens-1;++j)
+      {if(s[j]<=maxMIN) {maxMIN=s[j];maxMINj=j;}
+      }
+      cout<<maxMINj+1<<endl;
+     }
+    void decrease(int i,int v)
+    {int x=s[i-1]-v,j=i-1;
+    if(i==1){s[0]-=v; return;}
+     for(;j>0&&x<s[(j-1)/2];j=(j-1)/2)
+      s[j]=s[(j-1)/2];
+      s[j]=x;
+    }
 };
 
-void Josephus::set()
-{
-    cin >> n;
-    tmp_n = n;
-    cin >> m;
-}
-
-void Josephus::creat()
-{
-    pList p1, p2;
-    pList p = new List;
-    n += 1;
-    p -> num = 1;
-    p2 = head = p;
-    for(int i = 2; i < n; i++)
-    {
-        p = new List;
-        p -> num = i;
-
-        p1 = p2;
-        p2 = p;
-        p1 -> next = p2;
-    }
-
-    p2 -> next = head;
-    p = head;
-}
-
-void Josephus::del()
-{
-    pList p1 = NULL;
-    pList p2 = head;
-
-    n = tmp_n + 1;
-    while(n--)
-    {
-        int s = m - 1;
-        while(s--)
-        {
-            p1 = p2;
-            p2 = p2 -> next;
-        }
-
-        if(n == 0)
-        {
-            p2 = p2 -> next;
-            p1 -> next = NULL;
-            cout << p2 -> num << endl;
-        }
-        else
-        {
-            p2 = p2 -> next;
-            p1 -> next = p2;
-        }
-    }
-}
-
 int main()
-{
-    Josephus t;
-    t.set();
-    t.creat();
-    t.del();
-    cout<<9/2<<endl;
-    return 0;
+{int nums;
+ priorityQueue Q;
+ cin>>nums;
+
+for(int j=0;j<nums;++j){
+ string str; cin.ignore();
+ getline(cin,str);
+if(str=="insert")
+  {int p;
+   cin>>p;
+   Q.insert(p);
+  }
+else if(str=="find")
+  {int p;
+   cin>>p;
+   Q.find(p);
+  }
+ else {int p,q;
+       cin>>p>>q;
+       Q.decrease(p,q);
+      }
+ }
+ return 0;
 }
+
 
