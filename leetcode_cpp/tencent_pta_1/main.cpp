@@ -1,4 +1,10 @@
-
+//
+//  main.cpp
+//  tencent_pta_1
+//
+//  Created by 魏思哲 on 2021/4/13.
+//  Copyright © 2021 SizheWei. All rights reserved.
+//
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -50,7 +56,3 @@ int main()
     return 0;
 }
 
-
- 
-
- 
